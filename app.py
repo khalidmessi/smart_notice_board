@@ -30,8 +30,11 @@ def index():
 @app.route('/scan', methods=['GET'])
 def scan_card():
     """API to scan an RFID/NFC card"""
-    code = read_card()
-    return jsonify({'code': code if code else None})
+    try:
+        code = read_card()
+        return jsonify({'code': code if code else None})
+    except Exception as e:
+        return jsonify({'code': None, 'error': str(e)})
 
 
 @app.route('/submit', methods=['POST'])
@@ -45,6 +48,9 @@ def submit_form():
     dept = form_data.get('dept')
     role = form_data.get('role')  # Adding role (student/teacher)
 
+    if not all([code, name, year, section, dept, role]):
+        return jsonify({'status': 'error', 'message': 'All fields are required!'})
+
     if get_user_by_code(code):
         return jsonify({'status': 'error', 'message': 'Card already registered!'})
 
@@ -53,7 +59,6 @@ def submit_form():
         return jsonify({'status': 'success', 'message': 'Data saved successfully!'})
     else:
         return jsonify({'status': 'error', 'message': 'Error saving data!'})
-
 
 @app.route('/view')
 def view_data():

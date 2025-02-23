@@ -13,19 +13,20 @@ def create_table():
             name TEXT NOT NULL,
             year TEXT NOT NULL,
             section TEXT NOT NULL,
-            dept TEXT NOT NULL
+            dept TEXT NOT NULL,
+            role TEXT NOT NULL
         )
     ''')
     conn.commit()
     conn.close()
 
-def add_user(code, name, year, section, dept):
+def add_user(code, name, year, section, dept, role):
     """Insert a new user into the database."""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     try:
-        cursor.execute('INSERT INTO users (code, name, year, section, dept) VALUES (?, ?, ?, ?, ?)',
-                       (code, name, year, section, dept))
+        cursor.execute('INSERT INTO users (code, name, year, section, dept, role) VALUES (?, ?, ?, ?, ?, ?)',
+                       (code, name, year, section, dept, role))
         conn.commit()
         return True
     except sqlite3.IntegrityError:  # Handles duplicate card codes

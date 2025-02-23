@@ -61,8 +61,8 @@
             }
         }
         setInterval(fetchCode, 2000);
-        
-        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+
+       document.getElementById('registrationForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = {
         code: document.getElementById('code').value,
@@ -73,6 +73,11 @@
         role: document.getElementById('role').value
     };
 
+    if (!formData.code || !formData.name || !formData.year || !formData.section || !formData.dept || !formData.role) {
+        document.getElementById('message').innerText = 'All fields are required!';
+        return;
+    }
+
     const response = await fetch('/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -82,7 +87,6 @@
     const result = await response.json();
     document.getElementById('message').innerText = result.message;
     if (result.status === 'success') {
-        // Redirect to another page after successful submission
         window.location.href = '/view'; // Redirect to the view page
     }
 });
