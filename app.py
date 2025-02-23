@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template, request, jsonify
 from arduino_config import read_card
-from database import add_user, get_user_by_code
+from database import add_user, get_user_by_code,add_notice
 import sqlite3
 import os
 from werkzeug.utils import secure_filename
@@ -70,10 +70,20 @@ def view_data():
     conn.close()
     return render_template('view.html', users=users)
 
+@app.route('/view_notices')
+def view_notices():
+    """Fetch and display all uploaded notices."""
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM notices")
+    notices = cursor.fetchall()
+    conn.close()
+    return render_template('view_notices.html', notices=notices)
+
 
 @app.route('/upload_notice', methods=['GET', 'POST'])
 def upload_notice():
-    """Upload a notice image"""
+    """Upload a notice image and save details to the database."""
     if request.method == 'POST':
         if 'file' not in request.files:
             return jsonify({'status': 'error', 'message': 'No file part'})
@@ -86,11 +96,24 @@ def upload_notice():
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            return jsonify({'status': 'success', 'message': 'Notice uploaded!', 'file_path': file_path})
+
+            # Extract form data
+            year = request.form.get('year')
+            semester = request.form.get('semester')
+            role = request.form.get('role')
+            type = request.form.get('type')
+
+            # Save notice details to the database
+            success = add_notice(file_path, year, semester, role, type)
+            if success:
+                return jsonify({'status': 'success', 'message': 'Notice uploaded!', 'file_path': file_path})
+            else:
+                return jsonify({'status': 'error', 'message': 'Error saving notice details!'})
         else:
             return jsonify({'status': 'error', 'message': 'Invalid file type'})
     
     return render_template('upload_notice.html')
+
 
 
 if __name__ == '__main__':
