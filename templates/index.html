@@ -61,30 +61,31 @@
             }
         }
         setInterval(fetchCode, 2000);
-
+        
         document.getElementById('registrationForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = {
-                code: document.getElementById('code').value,
-                name: document.getElementById('name').value,
-                year: document.getElementById('year').value,
-                section: document.getElementById('section').value,
-                dept: document.getElementById('dept').value,
-                role: document.getElementById('role').value
-            };
+    e.preventDefault();
+    const formData = {
+        code: document.getElementById('code').value,
+        name: document.getElementById('name').value,
+        year: document.getElementById('year').value,
+        section: document.getElementById('section').value,
+        dept: document.getElementById('dept').value,
+        role: document.getElementById('role').value
+    };
 
-            const response = await fetch('/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
+    const response = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
 
-            const result = await response.json();
-            document.getElementById('message').innerText = result.message;
-            if (result.status === 'success') {
-                document.getElementById('registrationForm').reset();
-            }
-        });
+    const result = await response.json();
+    document.getElementById('message').innerText = result.message;
+    if (result.status === 'success') {
+        // Redirect to another page after successful submission
+        window.location.href = '/view'; // Redirect to the view page
+    }
+});
     </script>
 </body>
 </html>
