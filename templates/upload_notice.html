@@ -36,24 +36,15 @@
     <div class="form-container">
         <h2>Upload Event Notice</h2>
         <form id="uploadForm" enctype="multipart/form-data">
-            <input type="text" id="event_name" name="event_name" placeholder="Event Name" required>
-            <input type="text" id="event_type" name="event_type" placeholder="Event Type" required>
             <input type="text" id="year" name="year" placeholder="Year" required>
+            <input type="text" id="semester" name="semester" placeholder="Semester" required>
             <select id="role" name="role" required>
                 <option value="">Select Role</option>
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
             </select>
-            <select id="department" name="department" required>
-                <option value="">Select Department</option>
-                <option value="AI&DS">AI&DS</option>
-                <option value="CSE">CSE</option>
-                <option value="IT">IT</option>
-                <option value="CSBS">CSBS</option>
-                <option value="MECH">MECH</option>
-            </select>
+            <input type="text" id="type" name="type" placeholder="Notice Type" required>
             <input type="file" id="file" name="file" accept="image/*" required><br>
-
             <button type="submit">Upload Notice</button>
         </form>
         <p id="message"></p>
@@ -63,19 +54,18 @@
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData();
-            formData.append('event_name', document.getElementById('event_name').value);
-            formData.append('event_type', document.getElementById('event_type').value);
             formData.append('year', document.getElementById('year').value);
+            formData.append('semester', document.getElementById('semester').value);
             formData.append('role', document.getElementById('role').value);
-            formData.append('department', document.getElementById('department').value);
+            formData.append('type', document.getElementById('type').value);
 
             // Ensure the file is added to formData
-            const fileInput = document.getElementById('file');  // Corrected reference to file input
+            const fileInput = document.getElementById('file');
             if (fileInput.files.length === 0) {
                 document.getElementById('message').innerText = 'No file selected.';
                 return;
             }
-            formData.append('file', fileInput.files[0]);  // Corrected the field name from 'notice_image' to 'file'
+            formData.append('file', fileInput.files[0]);
 
             const response = await fetch('/upload_notice', {
                 method: 'POST',

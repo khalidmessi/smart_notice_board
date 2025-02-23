@@ -62,7 +62,7 @@ def add_notice(image_path, year, semester, role, type):
         conn.commit()
         return True
     except sqlite3.Error as e:
-        print(f"Error adding notice: {e}")
+        print(f"Error adding notice: {e}")  # Print the error for debugging
         return False
     finally:
         conn.close()

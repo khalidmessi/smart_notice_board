@@ -103,6 +103,9 @@ def upload_notice():
             role = request.form.get('role')
             type = request.form.get('type')
 
+            # Debug: Print form data
+            print(f"Year: {year}, Semester: {semester}, Role: {role}, Type: {type}")
+
             # Save notice details to the database
             success = add_notice(file_path, year, semester, role, type)
             if success:
@@ -113,7 +116,6 @@ def upload_notice():
             return jsonify({'status': 'error', 'message': 'Invalid file type'})
     
     return render_template('upload_notice.html')
-
 
 
 if __name__ == '__main__':
