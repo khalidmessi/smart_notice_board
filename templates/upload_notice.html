@@ -36,6 +36,8 @@
     <div class="form-container">
         <h2>Upload Event Notice</h2>
         <form id="uploadForm" enctype="multipart/form-data">
+            <input type="text" id="event_name" name="event_name" placeholder="Event Name" required>
+            <input type="text" id="event_type" name="event_type" placeholder="Event Type" required>
             <input type="text" id="year" name="year" placeholder="Year" required>
             <input type="text" id="semester" name="semester" placeholder="Semester" required>
             <select id="role" name="role" required>
@@ -54,6 +56,8 @@
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData();
+            formData.append('event_name', document.getElementById('event_name').value);
+            formData.append('event_type', document.getElementById('event_type').value);
             formData.append('year', document.getElementById('year').value);
             formData.append('semester', document.getElementById('semester').value);
             formData.append('role', document.getElementById('role').value);

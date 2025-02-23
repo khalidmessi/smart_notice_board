@@ -98,16 +98,18 @@ def upload_notice():
             file.save(file_path)
 
             # Extract form data
+            event_name = request.form.get('event_name')
+            event_type = request.form.get('event_type')
             year = request.form.get('year')
             semester = request.form.get('semester')
             role = request.form.get('role')
             type = request.form.get('type')
 
             # Debug: Print form data
-            print(f"Year: {year}, Semester: {semester}, Role: {role}, Type: {type}")
+            print(f"Event Name: {event_name}, Event Type: {event_type}, Year: {year}, Semester: {semester}, Role: {role}, Type: {type}")
 
             # Save notice details to the database
-            success = add_notice(file_path, year, semester, role, type)
+            success = add_notice(file_path, event_name, event_type, year, semester, role, type)
             if success:
                 return jsonify({'status': 'success', 'message': 'Notice uploaded!', 'file_path': file_path})
             else:
@@ -116,7 +118,6 @@ def upload_notice():
             return jsonify({'status': 'error', 'message': 'Invalid file type'})
     
     return render_template('upload_notice.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)

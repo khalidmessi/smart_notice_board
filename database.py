@@ -28,6 +28,8 @@ def create_notice_table():
         CREATE TABLE IF NOT EXISTS notices (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             image_path TEXT NOT NULL,
+            event_name TEXT NOT NULL,
+            event_type TEXT NOT NULL,
             year TEXT NOT NULL,
             semester TEXT NOT NULL,
             role TEXT NOT NULL,
@@ -52,13 +54,15 @@ def add_user(code, name, year, section, dept, role):
     finally:
         conn.close()
 
-def add_notice(image_path, year, semester, role, type):
+def add_notice(image_path, event_name, event_type, year, semester, role, type):
     """Insert a new notice into the database."""
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     try:
-        cursor.execute('INSERT INTO notices (image_path, year, semester, role, type) VALUES (?, ?, ?, ?, ?)',
-                       (image_path, year, semester, role, type))
+        cursor.execute('''
+            INSERT INTO notices (image_path, event_name, event_type, year, semester, role, type)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ''', (image_path, event_name, event_type, year, semester, role, type))
         conn.commit()
         return True
     except sqlite3.Error as e:
