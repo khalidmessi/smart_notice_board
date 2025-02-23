@@ -34,15 +34,17 @@
             <th>Year</th>
             <th>Section</th>
             <th>Department</th>
+            <th>Role</th> <!-- Added Role column -->
         </tr>
         {% for user in users %}
         <tr>
-            <td>{{ user[0] }}</td>
-            <td>{{ user[1] }}</td>
-            <td>{{ user[2] }}</td>
-            <td>{{ user[3] }}</td>
-            <td>{{ user[4] }}</td>
-            <td>{{ user[5] }}</td>
+            <td>{{ user[0] }}</td> <!-- ID -->
+            <td>{{ user[1] }}</td> <!-- RFID Code -->
+            <td>{{ user[2] }}</td> <!-- Name -->
+            <td>{{ user[3] }}</td> <!-- Year -->
+            <td>{{ user[4] }}</td> <!-- Section -->
+            <td>{{ user[5] }}</td> <!-- Department -->
+            <td>{{ user[6] }}</td> <!-- Role -->
         </tr>
         {% endfor %}
     </table>
