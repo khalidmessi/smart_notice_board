@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Notices</title>
+    <style>
+        body {
+            display: flex;
+            background-color: #001f3f;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white; /* Consistent text color */
+            overflow: hidden; /* Prevent page from scrolling */
+        }
+
+        .top-navigation-bar {
+            width: 100%;
+            text-align: center;
+            padding: 70px;
+            background-color: yellow; /* Yellow background for top navigation bar */
+            color: black; /* Text visibility on yellow background */
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 2.5em;
+            padding-top: 0px;
+        }
+
+        .notice-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .notice-item {
+            background-color: #002040;
+            color: white;
+            padding: 20px;
+            margin: 10px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .notice-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .notice-details {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-navigation-bar">
+        <h1>View Uploaded Notices</h1>
+    </div>
+
+    <div class="notice-container">
+        {% for notice in notices %}
+            <div class="notice-item">
+                <img src="{{ notice[1] }}" alt="Notice Image">
+                <div class="notice-details">
+                    <p><strong>Year:</strong> {{ notice[2] }}</p>
+                    <p><strong>Semester:</strong> {{ notice[3] }}</p>
+                    <p><strong>Role:</strong> {{ notice[4] }}</p>
+                    <p><strong>Type:</strong> {{ notice[5] }}</p>
+                </div>
+            </div>
+        {% else %}
+            <p>No notices uploaded yet.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

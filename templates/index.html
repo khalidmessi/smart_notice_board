@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFC Card Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>NFC Card Registration</h2>
+        <form id="registrationForm">
+            <input type="text" id="code" name="code" placeholder="Card Code" readonly>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+            <input type="text" id="year" name="year" placeholder="Year" required>
+            <input type="text" id="section" name="section" placeholder="Section" required>
+            <input type="text" id="dept" name="dept" placeholder="Department" required>
+            <select id="role" name="role" required>
+                <option value="">Select Role</option>
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="message"></p>
+        <a href="/upload_notice">Upload Event Notice</a>
+    </div>
+
+    <script>
+        async function fetchCode() {
+            const response = await fetch('/scan');
+            const data = await response.json();
+            if (data.code) {
+                document.getElementById('code').value = data.code;
+            }
+        }
+        setInterval(fetchCode, 2000);
+
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                code: document.getElementById('code').value,
+                name: document.getElementById('name').value,
+                year: document.getElementById('year').value,
+                section: document.getElementById('section').value,
+                dept: document.getElementById('dept').value,
+                role: document.getElementById('role').value
+            };
+
+            const response = await fetch('/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+            document.getElementById('message').innerText = result.message;
+            if (result.status === 'success') {
+                document.getElementById('registrationForm').reset();
+            }
+        });
+    </script>
+</body>
+</html>

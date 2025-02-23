@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Event Notice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Upload Event Notice</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="text" id="event_name" name="event_name" placeholder="Event Name" required>
+            <input type="text" id="event_type" name="event_type" placeholder="Event Type" required>
+            <input type="text" id="year" name="year" placeholder="Year" required>
+            <select id="role" name="role" required>
+                <option value="">Select Role</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+            <select id="department" name="department" required>
+                <option value="">Select Department</option>
+                <option value="AI&DS">AI&DS</option>
+                <option value="CSE">CSE</option>
+                <option value="IT">IT</option>
+                <option value="CSBS">CSBS</option>
+                <option value="MECH">MECH</option>
+            </select>
+            <input type="file" id="file" name="file" accept="image/*" required><br>
+
+            <button type="submit">Upload Notice</button>
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('event_name', document.getElementById('event_name').value);
+            formData.append('event_type', document.getElementById('event_type').value);
+            formData.append('year', document.getElementById('year').value);
+            formData.append('role', document.getElementById('role').value);
+            formData.append('department', document.getElementById('department').value);
+
+            // Ensure the file is added to formData
+            const fileInput = document.getElementById('file');  // Corrected reference to file input
+            if (fileInput.files.length === 0) {
+                document.getElementById('message').innerText = 'No file selected.';
+                return;
+            }
+            formData.append('file', fileInput.files[0]);  // Corrected the field name from 'notice_image' to 'file'
+
+            const response = await fetch('/upload_notice', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            document.getElementById('message').innerText = result.message;
+        });
+    </script>
+</body>
+</html>
